@@ -17,9 +17,10 @@ var flagServer = flag.String("server", "https://botsin.space", "base URL of Mast
 var flagApp = flag.String("app", "clientcred.secret", "location of Mastodon app credentials")
 var flagUser = flag.String("user", "usercred.secret", "location of Mastodon user access token")
 var flagData = flag.String("data", "ebooks.dat", "location of bot cache")
+var flagAutoFollow = flag.Bool("auto-follow", false, "automatically follow anyone who follows us")
 
 const (
-	scopes     = "read:statuses read:accounts read:follows write:statuses"
+	scopes     = "read:statuses read:accounts read:follows write:statuses follow"
 	noRedirect = "urn:ietf:wg:oauth:2.0:oob"
 )
 
@@ -65,6 +66,26 @@ func main() {
 			break
 		}
 	}
+	if *flagAutoFollow {
+		for {
+			fs, err := client.GetAccountFollowers(ctx, me.ID, &pg)
+			checkError(err, "Failed to get following accounts")
+
+			for _, f := range fs {
+				if _, ok := isFollowing[f.ID]; !ok {
+					isFollowing[f.ID] = f
+					following = append(following, f)
+					if _, err := client.AccountFollow(ctx, f.ID); err != nil {
+						log.Printf("Failed to follow back %q: %v", f.Acct, err)
+					}
+				}
+			}
+
+			if pg.MaxID == "" {
+				break
+			}
+		}
+	}
 
 	downloadToots(ctx, instance, following)
 	log.Println("Initial history downloaded.")
@@ -88,6 +109,14 @@ func main() {
 			case *mastodon.DeleteEvent:
 				// Ignore (for now)
 			case *mastodon.NotificationEvent:
+				if *flagAutoFollow && e.Notification.Type == "follow" {
+					if _, err := client.AccountFollow(ctx, e.Notification.Account.ID); err != nil {
+						log.Printf("Failed to follow back %q: %v", e.Notification.Account.Acct, err)
+					}
+					isFollowing[e.Notification.Account.ID] = &e.Notification.Account
+					go downloadToots(ctx, instance, []*mastodon.Account{&e.Notification.Account})
+					continue
+				}
 				if e.Notification.Type != "mention" || e.Notification.Account.Bot {
 					continue
 				}
