@@ -12,7 +12,7 @@ import (
 	"sync"
 	"unicode"
 
-	mastodon "github.com/mattn/go-mastodon"
+	"github.com/mattn/go-mastodon"
 )
 
 const markovPrefixLength = 2

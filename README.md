@@ -1,6 +1,6 @@
 # mstdn-ebooks
 
-**Lynnear Edition**
+**Inevitable Port to Go Edition**
 
 This version makes quite a few changes from [the original](https://github.com/Jess3Jane/mastodon-ebooks) and [the other original](https://github.com/Lynnesbian/mstdn-ebooks/tree/3d059d0b9b66fd31378574104f1a56f2be5a319c), such as:
 
@@ -14,7 +14,7 @@ This version makes quite a few changes from [the original](https://github.com/Je
 
 ## Installation
 
-1. Build mstdn-ebooks the same way you would build any Go program (`go get`, etc.) Alternatively, if you don't want to build it yourself, download a [precompiled release version](https://github.com/Lynnesbian/mstdn-ebooks/releases/latest).
+1. Build mstdn-ebooks the same way you would build any Go program (`go get`, etc.) Alternatively, if you don't want to build it yourself, download a [precompiled release version](https://github.com/BenLubar/mstdn-ebooks/releases/latest).
 2. If you haven't already, create an account on [botsin.space](https://botsin.space) or another instance.
 3. Make sure the bot account is ONLY following you. Remove any default follows.
 4. Run the `mstdn-ebooks` command. If your instance is not botsin.space, run the command as `mstdn-ebooks -server https://[your instance]`.

@@ -24,8 +24,8 @@ func ensureApp(ctx context.Context, cfg *mastodon.Config) {
 
 		app, err := mastodon.RegisterApp(ctx, &mastodon.AppConfig{
 			Server:       *flagServer,
-			ClientName:   "lynnesbian_mastodon_ebooks",
-			Website:      "https://github.com/Lynnesbian/mstdn-ebooks",
+			ClientName:   "Mastodon e-books",
+			Website:      "https://github.com/BenLubar/mstdn-ebooks",
 			Scopes:       scopes,
 			RedirectURIs: noRedirect,
 		})

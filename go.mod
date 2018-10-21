@@ -1,4 +1,4 @@
-module github.com/lynnesbian/mstdn-ebooks
+module github.com/BenLubar/mstdn-ebooks
 
 replace github.com/mattn/go-mastodon => github.com/BenLubar-PR/go-mastodon v0.0.3-0.20181020214714-b83071c1d6fe // indirect
 
