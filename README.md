@@ -6,7 +6,7 @@ This version makes quite a few changes from [the original](https://github.com/Je
 
 - Unicode support
 - Non-Markov stuff
-- Doesn't unecessarily redownload all toots every time
+- Doesn't uneccessarily redownload all toots every time
 - Uses an API called "webfinger" to allow downloading toots not known to your bot's instance
 - Self-contained executable handles scheduling
 - Docker support
