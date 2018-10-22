@@ -14,6 +14,7 @@ import (
 	"net/url"
 	"strings"
 	"sync"
+	"time"
 
 	"github.com/mattn/go-mastodon"
 	"golang.org/x/net/html"
@@ -65,7 +66,7 @@ func cleanContent(s string) string {
 	walk = func(n *html.Node) {
 		for n != nil {
 			if n.Type == html.TextNode {
-				body = append(body, n.Data...)
+				body = append(body, html.UnescapeString(n.Data)...)
 			} else if n.Type == html.ElementNode {
 				var isMention bool
 				if n.DataAtom == atom.A {
@@ -83,7 +84,7 @@ func cleanContent(s string) string {
 				} else if n.DataAtom == atom.Img {
 					for _, a := range n.Attr {
 						if a.Key == "alt" {
-							body = append(body, a.Val...)
+							body = append(body, html.UnescapeString(a.Val)...)
 							break
 						}
 					}
@@ -92,6 +93,8 @@ func cleanContent(s string) string {
 				if !isMention {
 					walk(n.FirstChild)
 				}
+
+				body = append(body, ' ')
 			}
 			n = n.NextSibling
 		}
@@ -148,6 +151,7 @@ func loadAllToots(ctx context.Context, acct, userURL string, start uint64, found
 			}
 		}
 		prev = page.Prev
+		time.Sleep(5 * time.Second)
 	}
 }
 

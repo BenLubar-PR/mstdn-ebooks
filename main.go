@@ -126,6 +126,9 @@ func main() {
 				if _, ok := isFollowing[e.Status.Account.ID]; !ok {
 					continue
 				}
+				if e.Status.Reblog != nil {
+					continue
+				}
 				if e.Status.Visibility != "unlisted" && e.Status.Visibility != "public" {
 					continue
 				}
@@ -134,6 +137,9 @@ func main() {
 				}
 				insertStatus(ctx, e.Status.Account.ID, e.Status.URI, e.Status.Content)
 			default:
+				if e == nil {
+					log.Panic("nil event from go-mastodon")
+				}
 				log.Printf("Unexpected event type: %T", e)
 			}
 		case <-halfHourSync:

@@ -109,7 +109,16 @@ func insertStatus(ctx context.Context, account mastodon.ID, id, content string) 
 	}
 
 	for _, p := range paragraphs {
-		updateMarkov(strings.Fields(p))
+		words := strings.Fields(p)
+
+		for i := 0; i < len(words); i++ {
+			if normalizeWord(words[i]) == "" {
+				copy(words[i:], words[i+1:])
+				words = words[:len(words)-1]
+			}
+		}
+
+		updateMarkov(words)
 	}
 
 	select {
